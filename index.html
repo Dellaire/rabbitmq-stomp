@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p id="messages"></p>
+
+	<script src="stomp.js"></script>
+	<script>
+		var ws = new WebSocket('ws://127.0.0.1:15674/ws');
+		var client = Stomp.over(ws);
+		
+		var onConnect = function(x) {
+			id = client.subscribe("/queue/messageQueue", function(message) {
+				document.getElementById("messages").innerHTML = document.getElementById("messages").innerHTML + message.body + "<br/>";
+			});
+		};
+		
+		var onError =  function() {
+			console.log('error');
+		};
+		
+		client.connect('guest', 'guest', onConnect, onError, '/');
+	</script>
+</body>
+</html>
